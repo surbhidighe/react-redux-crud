@@ -1,0 +1,17 @@
+{
+  "users": [
+    {
+      "id": 1,
+      "name": "Surbhi Dighe",
+      "designation": "Software Engineer",
+      "isActive": true
+    },
+
+    {
+      "id": 2,
+      "name": "Test user",
+      "designation": "Software Engineer",
+      "isActive": false
+    }
+  ]
+}
