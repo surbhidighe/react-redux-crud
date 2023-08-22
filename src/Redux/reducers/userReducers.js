@@ -1,4 +1,4 @@
-import { FETCH_USERS, FETCH_SELECTED_USER, ADD_USER } from "../action-types/userActionTypes";
+import { FETCH_USERS, FETCH_SELECTED_USER, ADD_USER, DELETE_USER } from "../action-types/userActionTypes";
 
 const initialState = {
   userData: [],
@@ -13,6 +13,12 @@ export const UserReducer = (state = initialState, action) => {
 
     case FETCH_SELECTED_USER:
       return { ...state, selectedUserDetails: action.payload.data };
+
+      case DELETE_USER:
+        return {
+          ...state,
+          userData: state.userData.filter((user) => user.id !== action.payload),
+        };
 
     case ADD_USER:
       return {...state, userData:[...state.userData, action.payload.data]}

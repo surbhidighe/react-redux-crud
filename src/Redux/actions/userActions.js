@@ -1,7 +1,8 @@
 import {
   FETCH_USERS,
   FETCH_SELECTED_USER,
-  ADD_USER
+  ADD_USER,
+  DELETE_USER
 } from "../action-types/userActionTypes";
 
 export const fetchAllUsers = (data) => {
@@ -18,9 +19,17 @@ export const getSelectedUser = (data) => {
   }
 }
 
+export const deleteUser = (id) => {
+  return {
+    type: DELETE_USER,
+    payload: id,
+  };
+};
+
 export const addUser = (data) => {
   return{
     type: ADD_USER,
     payload: {data}
   }
 }
+
