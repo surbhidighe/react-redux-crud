@@ -1,14 +1,14 @@
-import React, { useEffect, useMemo, useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
   deleteUser,
   fetchAllUsers,
-  updateUser,
+  updateUser
 } from "../Redux/actions/userActions";
 import { connect } from "react-redux";
-import { Link } from "react-router-dom";
-import { Button, Col, Container, Row, Table, Form } from "react-bootstrap";
-import { AiFillEye, AiFillEdit, AiFillDelete } from "react-icons/ai";
+import { Col, Container, Row, Table, Form } from "react-bootstrap";
+import { AiFillEdit, AiFillDelete } from "react-icons/ai";
 import ModalComponent from "./UI/ModalComponent";
+import AddUser from "./AddUser";
 
 const UserList = ({ userData, fetchAllUsers, deleteUser, updateUser }) => {
   const [showDeleteModal, setShowDeleteModal] = useState(false);
@@ -19,13 +19,6 @@ const UserList = ({ userData, fetchAllUsers, deleteUser, updateUser }) => {
     getAllUsers();
   }, []);
 
-  const getAllUsers = () => {
-    fetch("http://localhost:3001/users")
-      .then((response) => response.json())
-      .then((data) => fetchAllUsers(data))
-      .catch((error) => console.log(error));
-  };
-
   const handleDelete = (userInfo) => {
     setShowDeleteModal(true);
     setSelectedUser(userInfo);
@@ -34,6 +27,13 @@ const UserList = ({ userData, fetchAllUsers, deleteUser, updateUser }) => {
   const handleEdit = (userInfo) => {
     setShowEditModal(true);
     setSelectedUser(userInfo);
+  };
+
+  const getAllUsers = () => {
+    fetch("http://localhost:3001/users")
+      .then((response) => response.json())
+      .then((data) => fetchAllUsers(data))
+      .catch((error) => console.log(error));
   };
 
   const confirmDelete = () => {
@@ -71,89 +71,14 @@ const UserList = ({ userData, fetchAllUsers, deleteUser, updateUser }) => {
       .then((response) => response.json())
       .then((data) => {
         updateUser(selectedUser.id, data);
-        setShowEditModal(false)
+        setShowEditModal(false);
       })
       .catch((error) => {
         console.error("There was a problem with the fetch operation:", error);
       });
   };
 
-  const FormComponent = useMemo(
-    () =>
-      ({ selecteduser, setselecteduser }) => {
-        return (
-          <div>
-            <Form>
-              <Form.Group className="mb-3">
-                <Form.Label>ID</Form.Label>
-                <Form.Control
-                  type="number"
-                  placeholder="name@example.com"
-                  value={selecteduser.id}
-                  disabled
-                />
-              </Form.Group>
-              <Form.Group className="mb-3">
-                <Form.Label>Name</Form.Label>
-                <Form.Control
-                  type="text"
-                  placeholder="name"
-                  name="name"
-                  value={selecteduser.name}
-                  onChange={(e) =>
-                    setselecteduser({ ...selecteduser, name: e.target.value })
-                  }
-                />
-              </Form.Group>
-              <Form.Group className="mb-3">
-                <Form.Label>Email</Form.Label>
-                <Form.Control
-                  type="email"
-                  placeholder="email"
-                  name="email"
-                  value={selecteduser.email}
-                  onChange={(e) =>
-                    setselecteduser({ ...selecteduser, email: e.target.value })
-                  }
-                />
-              </Form.Group>
-              <Form.Group className="mb-3">
-                <Form.Label>Designation</Form.Label>
-                <Form.Control
-                  type="text"
-                  placeholder="designation"
-                  name="designation"
-                  value={selecteduser.designation}
-                  onChange={(e) =>
-                    setselecteduser({
-                      ...selecteduser,
-                      designation: e.target.value,
-                    })
-                  }
-                />
-              </Form.Group>
 
-              <Form.Group className="mb-3">
-                <Form.Label>Status</Form.Label>
-                <Form.Control
-                  type="text"
-                  placeholder="Status"
-                  name="isActive"
-                  value={selecteduser.isActive}
-                  onChange={(e) =>
-                    setselecteduser({
-                      ...selecteduser,
-                      isActive: e.target.value,
-                    })
-                  }
-                />
-              </Form.Group>
-            </Form>
-          </div>
-        );
-      },
-    []
-  );
 
   return (
     <>
@@ -161,7 +86,7 @@ const UserList = ({ userData, fetchAllUsers, deleteUser, updateUser }) => {
         <Row>
           <Col lg="10">All Users : {userData.length}</Col>
           <Col>
-            <Button variant="primary">Add user</Button>
+            <AddUser/>
           </Col>
         </Row>
         <Row>
@@ -187,11 +112,6 @@ const UserList = ({ userData, fetchAllUsers, deleteUser, updateUser }) => {
                     <td>{ele.isActive ? "Active" : "Inactive"}</td>
                     <td>
                       <Row>
-                        <Col>
-                          <Link to={`/user-details/${ele.id}`}>
-                            <AiFillEye />
-                          </Link>
-                        </Col>
                         <Col>
                           <AiFillEdit onClick={() => handleEdit(ele)} />
                         </Col>
@@ -235,9 +155,84 @@ const UserList = ({ userData, fetchAllUsers, deleteUser, updateUser }) => {
           cancelButtonText="Cancel"
         />
       )}
+
+    
     </>
   );
 };
+
+const FormComponent = ({ selecteduser, setselecteduser }) => {
+      return (
+        <div>
+          <Form>
+            <Form.Group className="mb-3">
+              <Form.Label>ID</Form.Label>
+              <Form.Control
+                type="number"
+                placeholder="name@example.com"
+                value={selecteduser.id}
+                disabled
+              />
+            </Form.Group>
+            <Form.Group className="mb-3">
+              <Form.Label>Name</Form.Label>
+              <Form.Control
+                type="text"
+                placeholder="name"
+                name="name"
+                value={selecteduser.name}
+                onChange={(e) =>
+                  setselecteduser({ ...selecteduser, name: e.target.value })
+                }
+              />
+            </Form.Group>
+            <Form.Group className="mb-3">
+              <Form.Label>Email</Form.Label>
+              <Form.Control
+                type="email"
+                placeholder="email"
+                name="email"
+                value={selecteduser.email}
+                onChange={(e) =>
+                  setselecteduser({ ...selecteduser, email: e.target.value })
+                }
+              />
+            </Form.Group>
+            <Form.Group className="mb-3">
+              <Form.Label>Designation</Form.Label>
+              <Form.Control
+                type="text"
+                placeholder="designation"
+                name="designation"
+                value={selecteduser.designation}
+                onChange={(e) =>
+                  setselecteduser({
+                    ...selecteduser,
+                    designation: e.target.value,
+                  })
+                }
+              />
+            </Form.Group>
+
+            <Form.Group className="mb-3">
+              <Form.Label>Status</Form.Label>
+              <Form.Control
+                type="text"
+                placeholder="Status"
+                name="isActive"
+                value={selecteduser.isActive}
+                onChange={(e) =>
+                  setselecteduser({
+                    ...selecteduser,
+                    isActive: e.target.value,
+                  })
+                }
+              />
+            </Form.Group>
+          </Form>
+        </div>
+      );
+    }
 
 const mapStateToProps = (state) => {
   return {
@@ -247,9 +242,9 @@ const mapStateToProps = (state) => {
 
 const mapDispatchToProps = (dispatch) => {
   return {
-    fetchAllUsers: (userData) => dispatch(fetchAllUsers(userData)),
+    fetchAllUsers: (data) => dispatch(fetchAllUsers(data)),
     deleteUser: (id) => dispatch(deleteUser(id)),
-    updateUser: (id, data) => dispatch(updateUser(id, data))
+    updateUser: (id, data) => dispatch(updateUser(id, data)),
   };
 };
 
