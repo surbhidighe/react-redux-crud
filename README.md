@@ -10,6 +10,8 @@ Create, Read, Update, and Delete operations on user data.
 Utilizes Redux for state management to ensure a single source of truth.
 Utilizes json-server to simulate a REST API for storing and retrieving user data.
 
+![redux-crud](https://github.com/surbhidighe/react-redux-crud/assets/51822986/4a7f108a-bcbf-4c94-b6dc-d0547b16e9a2)
+
 ### Project Setup for React Redux CRUD with json-server
 
 1. Clone the Repository:
