@@ -2,10 +2,10 @@ import React, { useEffect, useState } from "react";
 import {
   deleteUser,
   fetchAllUsers,
-  updateUser
+  updateUser,
 } from "../Redux/actions/userActions";
 import { connect } from "react-redux";
-import { Col, Container, Row, Table, Form } from "react-bootstrap";
+import { Col, Container, Row, Table, Form, Button } from "react-bootstrap";
 import { AiFillEdit, AiFillDelete } from "react-icons/ai";
 import ModalComponent from "./UI/ModalComponent";
 import AddUser from "./AddUser";
@@ -19,16 +19,19 @@ const UserList = ({ userData, fetchAllUsers, deleteUser, updateUser }) => {
     getAllUsers();
   }, []);
 
+  // on clicking delete icon
   const handleDelete = (userInfo) => {
     setShowDeleteModal(true);
     setSelectedUser(userInfo);
   };
 
+  // on clicking edit icon
   const handleEdit = (userInfo) => {
     setShowEditModal(true);
     setSelectedUser(userInfo);
   };
 
+  // fetch all user list
   const getAllUsers = () => {
     fetch("http://localhost:3001/users")
       .then((response) => response.json())
@@ -36,6 +39,7 @@ const UserList = ({ userData, fetchAllUsers, deleteUser, updateUser }) => {
       .catch((error) => console.log(error));
   };
 
+  // clicking confirm delete on modal
   const confirmDelete = () => {
     fetch(`http://localhost:3001/users/${selectedUser.id}`, {
       method: "DELETE",
@@ -54,6 +58,7 @@ const UserList = ({ userData, fetchAllUsers, deleteUser, updateUser }) => {
       });
   };
 
+  // clicking confirm update on modal
   const confirmUpdate = () => {
     fetch(`http://localhost:3001/users/${selectedUser.id}`, {
       method: "PUT",
@@ -65,7 +70,7 @@ const UserList = ({ userData, fetchAllUsers, deleteUser, updateUser }) => {
         name: selectedUser.name,
         email: selectedUser.email,
         designation: selectedUser.designation,
-        isActive: selectedUser.isActive,
+        isActive: selectedUser.isActive === "true" ? true : false,
       }),
     })
       .then((response) => response.json())
@@ -78,16 +83,17 @@ const UserList = ({ userData, fetchAllUsers, deleteUser, updateUser }) => {
       });
   };
 
-
+  // function to validate emil address
+  const validateEmail = (email) => {
+    const emailRegex = /^[^\s+@]+@[^\s@]+\.[^\s@]{2,}$/i;
+    return emailRegex.test(email);
+  };
 
   return (
     <>
       <Container>
-        <Row>
-          <Col lg="10">All Users : {userData.length}</Col>
-          <Col>
-            <AddUser/>
-          </Col>
+        <Row className="py-5 mt-5">
+          <AddUser />
         </Row>
         <Row>
           <Col>
@@ -106,17 +112,31 @@ const UserList = ({ userData, fetchAllUsers, deleteUser, updateUser }) => {
                 {userData.map((ele) => (
                   <tr key={ele.id}>
                     <td>{ele.id}</td>
-                    <td>{ele.name}</td>
+                    <td className="fw-bold">{ele.name}</td>
                     <td>{ele.email}</td>
                     <td>{ele.designation}</td>
-                    <td>{ele.isActive ? "Active" : "Inactive"}</td>
+                    <td
+                      className={`fw-bold ${
+                        ele.isActive ? "text-success" : "text-danger"
+                      }`}
+                    >
+                      {ele.isActive ? "Active" : "Inactive"}
+                    </td>
                     <td>
                       <Row>
                         <Col>
-                          <AiFillEdit onClick={() => handleEdit(ele)} />
+                          <AiFillEdit
+                            onClick={() => handleEdit(ele)}
+                            color="dodgerblue"
+                            role="button"
+                          />
                         </Col>
                         <Col>
-                          <AiFillDelete onClick={() => handleDelete(ele)} />
+                          <AiFillDelete
+                            onClick={() => handleDelete(ele)}
+                            color="red"
+                            role="button"
+                          />
                         </Col>
                       </Row>
                     </td>
@@ -127,6 +147,9 @@ const UserList = ({ userData, fetchAllUsers, deleteUser, updateUser }) => {
           </Col>
         </Row>
       </Container>
+
+
+      
       {showDeleteModal && (
         <ModalComponent
           showModal={showDeleteModal}
@@ -153,86 +176,95 @@ const UserList = ({ userData, fetchAllUsers, deleteUser, updateUser }) => {
           }
           confirmButtonText="Update"
           cancelButtonText="Cancel"
+          isConfirmDisabled={
+            selectedUser.name === "" ||
+            selectedUser.email === "" ||
+            !validateEmail(selectedUser.email)
+          }
         />
       )}
-
-    
     </>
   );
 };
 
 const FormComponent = ({ selecteduser, setselecteduser }) => {
-      return (
-        <div>
-          <Form>
-            <Form.Group className="mb-3">
-              <Form.Label>ID</Form.Label>
-              <Form.Control
-                type="number"
-                placeholder="name@example.com"
-                value={selecteduser.id}
-                disabled
-              />
-            </Form.Group>
-            <Form.Group className="mb-3">
-              <Form.Label>Name</Form.Label>
-              <Form.Control
-                type="text"
-                placeholder="name"
-                name="name"
-                value={selecteduser.name}
-                onChange={(e) =>
-                  setselecteduser({ ...selecteduser, name: e.target.value })
-                }
-              />
-            </Form.Group>
-            <Form.Group className="mb-3">
-              <Form.Label>Email</Form.Label>
-              <Form.Control
-                type="email"
-                placeholder="email"
-                name="email"
-                value={selecteduser.email}
-                onChange={(e) =>
-                  setselecteduser({ ...selecteduser, email: e.target.value })
-                }
-              />
-            </Form.Group>
-            <Form.Group className="mb-3">
-              <Form.Label>Designation</Form.Label>
-              <Form.Control
-                type="text"
-                placeholder="designation"
-                name="designation"
-                value={selecteduser.designation}
-                onChange={(e) =>
-                  setselecteduser({
-                    ...selecteduser,
-                    designation: e.target.value,
-                  })
-                }
-              />
-            </Form.Group>
+  return (
+    <div>
+      <Form>
+        <Form.Group className="mb-3">
+          <Form.Label>ID</Form.Label>
+          <Form.Control
+            type="number"
+            placeholder="name@example.com"
+            value={selecteduser.id}
+            disabled
+          />
+        </Form.Group>
+        <Form.Group className="mb-3">
+          <Form.Label>Name</Form.Label>
+          <Form.Control
+            type="text"
+            placeholder="name"
+            name="name"
+            value={selecteduser.name}
+            onChange={(e) =>
+              setselecteduser({ ...selecteduser, name: e.target.value })
+            }
+          />
+        </Form.Group>
+        <Form.Group className="mb-3">
+          <Form.Label>Email</Form.Label>
+          <Form.Control
+            type="email"
+            placeholder="email"
+            name="email"
+            value={selecteduser.email}
+            onChange={(e) =>
+              setselecteduser({ ...selecteduser, email: e.target.value })
+            }
+          />
+        </Form.Group>
+        <Form.Group className="mb-3">
+          <Form.Label>Designation</Form.Label>
+          <Form.Control
+            as="select"
+            name="designation"
+            value={selecteduser.designation}
+            onChange={(e) =>
+              setselecteduser({
+                ...selecteduser,
+                designation: e.target.value,
+              })
+            }
+          >
+            <option value="Software Engineer">Software Engineer</option>
+            <option value="Sr. Software Engineer">Sr. Software Engineer</option>
+            <option value="Tech Lead">Tech Lead</option>
+            <option value="Product Manager">Product Manager</option>
+          </Form.Control>
+        </Form.Group>
 
-            <Form.Group className="mb-3">
-              <Form.Label>Status</Form.Label>
-              <Form.Control
-                type="text"
-                placeholder="Status"
-                name="isActive"
-                value={selecteduser.isActive}
-                onChange={(e) =>
-                  setselecteduser({
-                    ...selecteduser,
-                    isActive: e.target.value,
-                  })
-                }
-              />
-            </Form.Group>
-          </Form>
-        </div>
-      );
-    }
+        <Form.Group className="mb-3">
+          <Form.Label>Status</Form.Label>
+          <Form.Control
+            as="select"
+            name="isActive"
+            value={selecteduser.isActive.toString()} // Convert boolean to string
+            onChange={(e) =>
+              setselecteduser({
+                ...selecteduser,
+                isActive: e.target.value,
+              })
+            }
+          >
+            <option value="true">Active</option>
+            <option value="false">Inactive</option>
+          </Form.Control>
+        </Form.Group>
+      </Form>
+    </div>
+  );
+};
 
 const mapStateToProps = (state) => {
   return {

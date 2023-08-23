@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Button, Form } from "react-bootstrap";
+import { Button, Col, Form } from "react-bootstrap";
 import { addUser } from "../Redux/actions/userActions";
 import ModalComponent from "./UI/ModalComponent";
 import { connect } from "react-redux";
@@ -7,11 +7,11 @@ import { connect } from "react-redux";
 const initialUserData = {
   name: "",
   email: "",
-  designation: "",
+  designation: "Software Engineer",
   isActive: false,
 };
 
-const AddUser = ({ addUser }) => {
+const AddUser = ({ userData, addUser }) => {
   const [newUser, setnewUser] = useState(initialUserData);
   const [showAddModal, setShowAddModal] = useState(false);
 
@@ -29,7 +29,7 @@ const AddUser = ({ addUser }) => {
         name: newUser.name,
         email: newUser.email,
         designation: newUser.designation,
-        isActive: newUser.isActive,
+        isActive: newUser.isActive === "true" ? true : false,
       }),
     })
       .then((response) => response.json())
@@ -43,11 +43,23 @@ const AddUser = ({ addUser }) => {
       });
   };
 
+  const validateEmail = (email) => {
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    return emailRegex.test(email);
+  };
+
   return (
     <>
-      <Button variant="primary" onClick={handleAdd}>
-        Add user
-      </Button>
+      <Col>
+        <Button variant="outline-primary" className="pe-none">
+        All Users <span class="badge bg-secondary">{userData.length}</span>
+        </Button>
+      </Col>
+      <Col className="text-end">
+        <Button variant="primary" onClick={handleAdd}>
+          Add user
+        </Button>
+      </Col>
 
       {showAddModal && (
         <ModalComponent
@@ -60,6 +72,11 @@ const AddUser = ({ addUser }) => {
           }
           confirmButtonText="Update"
           cancelButtonText="Cancel"
+          isConfirmDisabled={
+            newUser.name === "" ||
+            newUser.email === "" ||
+            !validateEmail(newUser.email)
+          }
         />
       )}
     </>
@@ -78,6 +95,7 @@ const NewUserFormComponent = ({ newUser, setnewUser }) => {
             name="name"
             value={newUser.name}
             onChange={(e) => setnewUser({ ...newUser, name: e.target.value })}
+            required
           />
         </Form.Group>
         <Form.Group className="mb-3">
@@ -93,8 +111,7 @@ const NewUserFormComponent = ({ newUser, setnewUser }) => {
         <Form.Group className="mb-3">
           <Form.Label>Designation</Form.Label>
           <Form.Control
-            type="text"
-            placeholder="designation"
+            as="select"
             name="designation"
             value={newUser.designation}
             onChange={(e) =>
@@ -103,23 +120,30 @@ const NewUserFormComponent = ({ newUser, setnewUser }) => {
                 designation: e.target.value,
               })
             }
-          />
+          >
+            <option value="Software Engineer">Software Engineer</option>
+            <option value="Sr. Software Engineer">Sr. Software Engineer</option>
+            <option value="Tech Lead">Tech Lead</option>
+            <option value="Product Manager">Product Manager</option>
+          </Form.Control>
         </Form.Group>
 
         <Form.Group className="mb-3">
           <Form.Label>Status</Form.Label>
           <Form.Control
-            type="text"
-            placeholder="Status"
+            as="select"
             name="isActive"
-            value={newUser.isActive}
+            value={newUser.isActive.toString()} // Convert boolean to string
             onChange={(e) =>
               setnewUser({
                 ...newUser,
                 isActive: e.target.value,
               })
             }
-          />
+          >
+            <option value="true">Active</option>
+            <option value="false">Inactive</option>
+          </Form.Control>
         </Form.Group>
       </Form>
     </div>

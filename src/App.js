@@ -4,7 +4,7 @@ import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 
 const App = () => {
   return (
-    <div className="p-5">
+    <div>
     <Router>
       <Routes>
         <Route path="/" element={<UserList/>} />

@@ -2,73 +2,45 @@
   "users": [
     {
       "id": 1,
-      "name": "Test user 1",
-      "email": "testuser1@test.com",
-      "designation": "Software Engineer",
+      "name": "Marco Jarvis",
+      "email": "testuser22@t.com",
+      "designation": "Sr. Software Engineer",
       "isActive": false
     },
     {
       "id": 2,
-      "name": "Test user 2",
-      "email": "testuser2@test.com",
-      "designation": "Software Engineer",
-      "isActive": false
+      "name": "Craig Morales",
+      "email": "testuser5@test.com",
+      "designation": "Tech Lead",
+      "isActive": true
     },
     {
       "id": 3,
-      "name": "Test user 3",
-      "email": "testuser3@test.com",
-      "designation": "Software Engineer",
+      "name": "Caitlin",
+      "email": "testuser7@test.com",
+      "designation": "Product Manager",
       "isActive": false
     },
     {
       "id": 4,
-      "name": "Test user 4",
-      "email": "testuser4@test.com",
-      "designation": "Software Engineer",
-      "isActive": false
-    },
-    {
-      "id": 5,
-      "name": "Test user 5",
-      "email": "testuser5@test.com",
-      "designation": "Software Engineer",
-      "isActive": false
-    },
-    {
-      "id": 6,
-      "name": "Test user 6",
-      "email": "testuser6@test.com",
-      "designation": "Software Engineer",
-      "isActive": false
-    },
-    {
-      "id": 7,
-      "name": "Test user 7",
-      "email": "testuser7@test.com",
-      "designation": "Software Engineer",
-      "isActive": false
-    },
-    {
-      "id": 8,
-      "name": "Test user 8",
+      "name": "Joseph Drake",
       "email": "testuser8@test.com",
       "designation": "Software Engineer",
       "isActive": false
     },
     {
-      "id": 9,
-      "name": "Test user 9",
+      "id": 5,
+      "name": "Surbhi Dighe",
       "email": "testuser9@test.com",
       "designation": "Software Engineer",
       "isActive": false
     },
     {
-      "id": 10,
-      "name": "Test user 10",
-      "email": "testuser10@test.com",
-      "designation": "Software Engineer",
-      "isActive": false
+      "name": "Herry Singh",
+      "email": "herry@test.com",
+      "designation": "Sr. Software Engineer",
+      "isActive": true,
+      "id": 6
     }
   ]
 }
