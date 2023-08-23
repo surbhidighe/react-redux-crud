@@ -2,7 +2,8 @@ import {
   FETCH_USERS,
   FETCH_SELECTED_USER,
   ADD_USER,
-  DELETE_USER
+  DELETE_USER,
+  UPDATE_USER
 } from "../action-types/userActionTypes";
 
 export const fetchAllUsers = (data) => {
@@ -26,6 +27,12 @@ export const deleteUser = (id) => {
   };
 };
 
+export const updateUser = (id, updatedData) => {
+  return {
+    type: UPDATE_USER,
+    payload: {id, updatedData}
+  }
+}
 export const addUser = (data) => {
   return{
     type: ADD_USER,
